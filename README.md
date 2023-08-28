@@ -1,6 +1,6 @@
 # K-Means: Implementación desde cero
 
-- En este proyecto se implementa desde cero el algoritmo K-Means para Clusters y se comparan los resultados con la implementación de Scikit Learn.  
+- En este proyecto se implementa desde cero el algoritmo K-Means de *clustering* y se comparan los resultados con la implementación de Scikit Learn.  
 - Como datos a estudiar se usa la base de datos del juego FIFA (año 2022) para separar los jugadores por categorias.   
 - Se usan estos datos ya que la mayoría de las personas conoce a los jugadores más famosos y esto permite evaluar fácilmente los resultados. 
 
@@ -78,6 +78,13 @@ $${\displaystyle X'={\frac {X-X_{min}}{X_{max}-X_{min}}}}$$
 ### Loop
 - Se realizan recursivamente los pasos de **Asociar datos a centroides** y de **Actualizar centroides** hasta que centroides dejan de cambiar o se cumple máximo número de iteraciones.
 
+https://github.com/rhoffmannv/kmeans-manual/assets/44439632/a03fe554-2814-4fb6-935d-6fb8fad0ffd5
+
+- En el video se puede ver como los centroides se van actualizando y sus jugadores asociados varian hasta estabilizarse.
+- Se usó un valor *k=5* para el video.
+- Se extraen dos componentes principales con PCA para poder graficar en 2D.
+
+
 ## Implementación de Scikit Learn de K-Means
 
 - Se importa el modelo KMeans de la librería Scikit-Learn.
@@ -88,9 +95,11 @@ $${\displaystyle X'={\frac {X-X_{min}}{X_{max}-X_{min}}}}$$
   
 # Análisis de Resultados
 
+Se usa el valor *k=3* por simplicidad.
+
 ## Jugadores por cada cluster
 
-- Para analizar los *clusters* obtenidos manualmente se crea una tabla con jugadores por centroide, que muestra 5 jugadores de cada *cluster*
+- Para analizar los *clusters* obtenidos **manualmente** se crea una tabla con jugadores por centroide, que muestra 5 jugadores de cada *cluster*
 
 <p align="center">
   <img src="Jugadores por cada cluster.png" width="500" height="auto" />
@@ -99,13 +108,44 @@ $${\displaystyle X'={\frac {X-X_{min}}{X_{max}-X_{min}}}}$$
 - Se puede ver que los *clusters* encontrados exhiben cierta lógica:
   - El *cluster 0* está compuesto por los jugadores de elite.
   - El *cluster 1* está compuesto por jugadores que fueron de élite pero ya están al final de su carrera.
-  - El *cluster 2* está compuesto por jugadores menos conocidos.  
+  - El *cluster 2* está compuesto por jugadores menos conocidos y jovenes.  
 
 ## Comparación *feature* a *feature*
 
-- Clasificar centroides entre "Alto", "Medio" y "Bajo" *feature* a *feature*.
+- Se clasifican centroides (**manuales**) entre "Alto", "Medio" y "Bajo" *feature* a *feature*.
 - Se reemplaza valor de feature de cada centroide por su posición relativa comparando el mismo feature con los otros centroides.
 
 <p align="center">
-  <img src="Jugadores por cada cluster.png" width="500" height="auto" />
+  <img src="Comparativa de Clusters feature a feature.png" width="500" height="auto" />
 </p>
+
+- Se confirma lo encontrado anteriormente:
+  - El *cluster 0* contiene a los jugadores con mayor nivel, mayor precio y mayores sueldos.
+  - El *cluster 1* contiene a los jugadores con mayor edad y bajo potencial futuro pero nivel intermedio.
+  - El *cluster 0* contiene a los jugadores con menor edad, menor precio y menores sueldos, pero con potencial.
+ 
+# Comparación de Resultados
+
+## Gráficos *scatter*
+- Se extraen dos componentes principales con PCA para poder graficar en 2D.
+- Gráfico de todos los datapoints, con color asociado a *label* ie. centroide asociado.
+- Se agregan los centroides en color rojo.
+
+<p align="center">
+  <img src="kmeans-3.png" width="400" height="auto" />
+  <img src="kmeans-3_scikit.png" width="400" height="auto" />
+</p>
+
+- El gráfico de la izquierda corresponde a los *clusters* encontrados manualmente y el gráfico de la derecha a los *clusters* encontrados por el algoritmo de Scikit-Learn
+- Se puede ver que ambos dividen a los jugadores de manera similar.
+
+## Gráfico comparativo de centroides
+
+- Para comparar de manera directa ambos resultados, se grafican los 3 centroides manuales y los 3 centroides de Scikit-Learn.
+- Se grafican los centroides manuales como círculos y centroides de Scikit-Learn como triángulos.
+
+<p align="center">
+  <img src="comparacion_centroides.png" width="500" height="auto" />
+</p>
+
+- Se puede ver que hay una clara asociación 1 a 1 entre los centroides y que están bastante cercanos por lo que es un buen resultado.

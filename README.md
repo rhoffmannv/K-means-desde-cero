@@ -12,7 +12,7 @@ El algoritmo K-Means es una técnica de Clustering que permite dividir los datos
 
 El proyecto se puede dividir a grandes rasgos en:
 
-- Importación librerías y de datos
+- Importación de librerías y de datos
 - Preprocesamiento de datos
 - Implementación manual de K-Means
   - Inicializar centroides
@@ -24,9 +24,88 @@ El proyecto se puede dividir a grandes rasgos en:
   - Tabla de jugadores por clusters
   - Tabla comparativa de centroides 
 - Comparación de resultados
-  - Gráficos "scatter" de datos y de clusters
-  - Gráfico comparativo de centroides 
+  - Gráficos *scatter* de datos y de clusters
+  - Gráfico comparativo de centroides
+ 
+> El código está en el Jupyter Notebook **KMeana Implementacion Manual** con una explicación más detallada incluida.
+ 
+## Importación librerías y de datos
 
-# Resultados del Proyecto
+Las librerías utilizadas son:
+  - Numpy
+  - Pandas
+  - Scikit Learn
 
-- Para comparar
+Los datos se descargaron en formato *.csv* desde Kaggle en este [link](https://www.kaggle.com/datasets/stefanoleone992/fifa-22-complete-player-dataset) y se cargaron usando Pandas.
+
+## Preprocesamiento de datos
+
+- Se extraen las columnas de interés (*features*) del Pandas.DataFrame que corresponden a:
+  - *overall*: Nivel actual del jugador
+  - *potential*: Potencial del jugador
+  - *value_eur*: Valor de mercado del jugador en euros
+  - *wage_eur*: Sueldo del jugador en euros
+  - *age*: Edad del jugador
+
+- Se realiza una normalización de los datos Max-Min para que ninguna *feature* tenga preferencia inicialmente.  
+$${\displaystyle X'={\frac {X-X_{min}}{X_{max}-X_{min}}}}$$
+
+## Implementación manual de K-Means
+
+### Inicializar centroides
+
+- Se toman k valores al azar por cada columna de *features* de los datos ya normalizados.
+- La matriz resultante se transpone, así las filas correponden a las *feature* y las columnas a cada centroide inicial.
+
+### Asociar datos a centroides
+
+- Por cada jugador (*datapoint*) se calcula la distancia a cada centroide como:
+  $$d(jugador, centroide) = \sqrt{\sum_{i=0}^{n°features}{(jugador[i]}-centroide[i])^2}$$
+  > Donde *jugador[i]* corresponde al valor del *i-ésimo feature* del jugador.  
+  > Donde *centroide[i]* corresponde al valor del *i-ésimo feature* del centroide.   
+  > Y en este caso *n°features = 5*  
+- Luego se asocia el jugador al centroide con la menor distancia
+
+### Actualizar centroides
+
+- Se actualizan los centroides como la media geométrica de *datapoints* ie. jugadores asociados.
+  $$\displaystyle{nuevo \ centroide(c)[i] = \prod_{jugador(c)}^{n}jugador(c)[i]^{\frac{1}{n}}}$$
+  > Donde *[i]* hace referencia a la *feature i-ésima* y *(c)* hace referencia al centroide *c-ésimo*.  
+  > Se suma sobre todos los jugadores asociados al centroide *c-ésimo*.  
+  > *n* corresponde al total de jugadores asociados al centroide *c-ésimo*.   
+  > Notar que se realiza *feature* a *feature* para obtener un valor por *feature* para el nuevo centroide.  
+
+### Loop
+- Se realizan recursivamente los pasos de **Asociar datos a centroides** y de **Actualizar centroides** hasta que centroides dejan de cambiar o se cumple máximo número de iteraciones.
+
+## Implementación de Scikit Learn de K-Means
+
+- Se importa el modelo KMeans de la librería Scikit-Learn.
+- Se crea instancia con valor de *k* deseado.
+- Se ajusta a los datos con método *fit*.
+- Los centroides se encuentran en la variable interna *cluster_centers_* del modelo KMeans.
+- Las asociaciones de los jugadores se encuentran en la variable interna *labels_* del modelo KMeans.
+  
+# Análisis de Resultados
+
+## Jugadores por cada cluster
+
+- Para analizar los *clusters* obtenidos manualmente se crea una tabla con jugadores por centroide, que muestra 5 jugadores de cada *cluster*
+
+<p align="center">
+  <img src="Jugadores por cada cluster.png" width="500" height="auto" />
+</p>
+
+- Se puede ver que los *clusters* encontrados exhiben cierta lógica:
+  - El *cluster 0* está compuesto por los jugadores de elite.
+  - El *cluster 1* está compuesto por jugadores que fueron de élite pero ya están al final de su carrera.
+  - El *cluster 2* está compuesto por jugadores menos conocidos.  
+
+## Comparación *feature* a *feature*
+
+- Clasificar centroides entre "Alto", "Medio" y "Bajo" *feature* a *feature*.
+- Se reemplaza valor de feature de cada centroide por su posición relativa comparando el mismo feature con los otros centroides.
+
+<p align="center">
+  <img src="Jugadores por cada cluster.png" width="500" height="auto" />
+</p>

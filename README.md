@@ -63,7 +63,7 @@ $${\displaystyle X'={\frac {X-X_{min}}{X_{max}-X_{min}}}}$$
   $$d(jugador, centroide) = \sqrt{\sum_{i=0}^{n°features}{(jugador[i]}-centroide[i])^2}$$
   > Donde *jugador[i]* corresponde al valor del *i-ésimo feature* del jugador.  
   > Donde *centroide[i]* corresponde al valor del *i-ésimo feature* del centroide.   
-  > Y en este caso *n°features = 5*  
+  > Y en este caso *n° features = 5*.  
 - Luego se asocia el jugador al centroide con la menor distancia
 
 ### Actualizar centroides

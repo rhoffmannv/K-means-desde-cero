@@ -27,7 +27,7 @@ El proyecto se puede dividir a grandes rasgos en:
   - Gráficos *scatter* de datos y de clusters
   - Gráfico comparativo de centroides
  
-> El código está en el Jupyter Notebook **KMeana Implementacion Manual** con una explicación más detallada incluida.
+> El código está en el Jupyter Notebook **KMeans Implementacion Manual** con una explicación más detallada incluida.
  
 ## Importación librerías y de datos
 
